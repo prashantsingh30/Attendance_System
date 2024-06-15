@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="styles.css" />
   </head>
   <body>
-    <form action="/value" method="get">
+    <form onsubmit="redirectToSecondPage(event)">
       <h1 style="color: #fff; margin-bottom: 20px">Choose Desired Course</h1>
       <div style="text-align: center">
         <button type="button" onclick="fetch_sheetID('FYCS')">FYCS</button>
@@ -19,9 +19,22 @@
       </div>
     </form>
     <script>
-      function fetch_sheetID(course) {
-        let sheetValue = document.getElementById("sheetValue");
-        sheetValue.value = localStorage.getItem(course);
+      async function fetch_sheetID(course) {
+        try {
+          let response = await fetch(`/value?course=${course}`);
+          let data = await response.json();
+          document.getElementById("sheetValue").value = data.sheet_value;
+        } catch (error) {
+          console.error("Error fetching sheet ID:", error);
+        }
+      }
+
+      function redirectToSecondPage(event) {
+        event.preventDefault();
+        const sheetValue = document.getElementById("sheetValue").value;
+        window.location.href = `second.html?sheet_value=${encodeURIComponent(
+          sheetValue
+        )}`;
       }
     </script>
   </body>

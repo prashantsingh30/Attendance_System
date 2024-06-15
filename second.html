@@ -9,9 +9,7 @@
   </head>
   <body>
     <form>
-      <h2 style="color: #fff; margin-bottom: 20px">
-        Enter Google Spreadsheet ID
-      </h2>
+      <h2 style="color: #fff; margin-bottom: 20px">Google Spreadsheet Data</h2>
       <div style="text-align: center">
         <label for="FYCS">FYCS:</label>
         <input type="text" id="FYCS" name="FYCS" /><br />
@@ -29,6 +27,7 @@
         localStorage.setItem("SYCS", document.getElementById("SYCS").value);
         localStorage.setItem("TYCS", document.getElementById("TYCS").value);
       }
+
       function loadValues() {
         document.getElementById("FYCS").value =
           localStorage.getItem("FYCS") || "";
@@ -37,7 +36,41 @@
         document.getElementById("TYCS").value =
           localStorage.getItem("TYCS") || "";
       }
-      window.onload = loadValues;
+
+      async function fetchSheetData(sheetId) {
+        const apiKey = "YOUR_GOOGLE_SHEETS_API_KEY"; // Replace with your API key
+        const range = "Sheet1!A1:D10"; // Adjust the range as needed
+
+        try {
+          const response = await fetch(
+            `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`
+          );
+          const data = await response.json();
+          displaySheetData(data.values);
+        } catch (error) {
+          console.error("Error fetching data from Google Sheets:", error);
+        }
+      }
+
+      function displaySheetData(data) {
+        // Example: Display data in the first input field (FYCS)
+        if (data && data.length > 0) {
+          document.getElementById("FYCS").value = data[0][0]; // Adjust to display relevant data
+        }
+      }
+
+      function displaySheetValue() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sheetValue = urlParams.get("sheet_value");
+        if (sheetValue) {
+          fetchSheetData(sheetValue);
+        }
+      }
+
+      window.onload = function () {
+        loadValues();
+        displaySheetValue();
+      };
     </script>
   </body>
 </html>
