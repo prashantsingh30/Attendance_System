@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+  </head>
+  <body>
+    <form>
+      <h2 style="color: #fff; margin-bottom: 20px">
+        Enter Google Spreadsheet ID
+      </h2>
+      <div style="text-align: center">
+        <label for="FYCS">FYCS:</label>
+        <input type="text" id="FYCS" name="FYCS" /><br />
+        <label for="SYCS">SYCS:</label>
+        <input type="text" id="SYCS" name="SYCS" /><br />
+        <label for="TYCS">TYCS:</label>
+        <input type="text" id="TYCS" name="TYCS" /><br />
+        <button type="button" onclick="saveValues()">Save</button>
+        <button type="button" onclick="loadValues()">Load Values</button>
+      </div>
+    </form>
+    <script>
+      function saveValues() {
+        localStorage.setItem("FYCS", document.getElementById("FYCS").value);
+        localStorage.setItem("SYCS", document.getElementById("SYCS").value);
+        localStorage.setItem("TYCS", document.getElementById("TYCS").value);
+      }
+      function loadValues() {
+        document.getElementById("FYCS").value =
+          localStorage.getItem("FYCS") || "";
+        document.getElementById("SYCS").value =
+          localStorage.getItem("SYCS") || "";
+        document.getElementById("TYCS").value =
+          localStorage.getItem("TYCS") || "";
+      }
+      window.onload = loadValues;
+    </script>
+  </body>
+</html>
