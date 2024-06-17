@@ -1,76 +1,132 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" type="text/css" href="styles.css" />
-  </head>
-  <body>
-    <form>
-      <h2 style="color: #fff; margin-bottom: 20px">Google Spreadsheet Data</h2>
-      <div style="text-align: center">
-        <label for="FYCS">FYCS:</label>
-        <input type="text" id="FYCS" name="FYCS" /><br />
-        <label for="SYCS">SYCS:</label>
-        <input type="text" id="SYCS" name="SYCS" /><br />
-        <label for="TYCS">TYCS:</label>
-        <input type="text" id="TYCS" name="TYCS" /><br />
-        <button type="button" onclick="saveValues()">Save</button>
-        <button type="button" onclick="loadValues()">Load Values</button>
-      </div>
-    </form>
-    <script>
-      function saveValues() {
-        localStorage.setItem("FYCS", document.getElementById("FYCS").value);
-        localStorage.setItem("SYCS", document.getElementById("SYCS").value);
-        localStorage.setItem("TYCS", document.getElementById("TYCS").value);
+
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(to right, #e3f2fd, #90caf9);
+      font-family: "Roboto", sans-serif;
+    }
+
+    form {
+      position: relative;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(45deg, #fceabb, #f8b500);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      animation: slideIn 0.5s ease-out;
+      padding: 30px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    form:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
       }
 
-      function loadValues() {
-        document.getElementById("FYCS").value =
-          localStorage.getItem("FYCS") || "";
-        document.getElementById("SYCS").value =
-          localStorage.getItem("SYCS") || "";
-        document.getElementById("TYCS").value =
-          localStorage.getItem("TYCS") || "";
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    button,
+    input {
+      background: linear-gradient(45deg, #ff5722, #e91e63);
+      color: white;
+      padding: 14px 20px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 20px;
+      transition: background 0.3s ease, transform 0.3s ease,
+        box-shadow 0.3s ease;
+    }
+
+    input {
+      width: 90%;
+    }
+
+    button:hover,
+    input:hover {
+      background: linear-gradient(45deg, #e91e63, #ff5722);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 600px) {
+      body {
+        height: auto;
+        padding: 20px;
       }
 
-      async function fetchSheetData(sheetId) {
-        const apiKey = "YOUR_GOOGLE_SHEETS_API_KEY"; // Replace with your API key
-        const range = "Sheet1!A1:D10"; // Adjust the range as needed
-
-        try {
-          const response = await fetch(
-            `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${range}?key=${apiKey}`
-          );
-          const data = await response.json();
-          displaySheetData(data.values);
-        } catch (error) {
-          console.error("Error fetching data from Google Sheets:", error);
-        }
+      form {
+        width: 100%;
+        padding: 15px;
       }
 
-      function displaySheetData(data) {
-        // Example: Display data in the first input field (FYCS)
-        if (data && data.length > 0) {
-          document.getElementById("FYCS").value = data[0][0]; // Adjust to display relevant data
-        }
+      button,
+      input {
+        font-size: 14px;
+        padding: 12px 18px;
       }
+    }
+  </style>
+</head>
 
-      function displaySheetValue() {
-        const urlParams = new URLSearchParams(window.location.search);
-        const sheetValue = urlParams.get("sheet_value");
-        if (sheetValue) {
-          fetchSheetData(sheetValue);
-        }
-      }
+<body>
+  <form>
+    <h2 style="color: #fff; margin-bottom: 20px">Enter Google Spreadsheet ID</h2>
+    <div style="text-align: center">
+      <label for="FYCS">FYCS:</label>
+      <input type="text" id="FYCS" name="FYCS" /><br />
+      <label for="SYCS">SYCS:</label>
+      <input type="text" id="SYCS" name="SYCS" /><br />
+      <label for="TYCS">TYCS:</label>
+      <input type="text" id="TYCS" name="TYCS" /><br />
+      <button type="button" onclick="saveValues()">Save</button>
+      <button type="button" onclick="redirect()">Next Page</button>
+    </div>
+  </form>
+  <script>
+    function redirect() {
+      window.location = 'index.html';
+    }
+    function saveValues() {
+      localStorage.setItem("FYCS", document.getElementById("FYCS").value);
+      localStorage.setItem("SYCS", document.getElementById("SYCS").value);
+      localStorage.setItem("TYCS", document.getElementById("TYCS").value);
+    }
+    function loadValues() {
+      document.getElementById("FYCS").value =
+        localStorage.getItem("FYCS") || "";
+      document.getElementById("SYCS").value =
+        localStorage.getItem("SYCS") || "";
+      document.getElementById("TYCS").value =
+        localStorage.getItem("TYCS") || "";
+    }
+    window.onload = loadValues;
+  </script>
+</body>
 
-      window.onload = function () {
-        loadValues();
-        displaySheetValue();
-      };
-    </script>
-  </body>
 </html>
